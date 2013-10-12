@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="description" content="Open source Java projects"/>
+		<title>Zavazoo Koala</title>
+	</head>
+	<body>
+		<div id="root">
+			<section id="synopsis" class="top">
+				<article id="breakdown">
+					<hgroup>
+						<h1>Koala</h1>
+						<h2>JavaScript Client-Side Includes</h2>
+					</hgroup>
+					<figure class="koala"></figure>
+					<ul>
+						<li>Koala simulates server-side includes functionality exclusively using client-side JavaScript</li>
+						<li>Koala supports the inclusion of common fragments, such as headers and footers, using either synchronous or asynchronous requests to retrieve the document fragments and insert HTML elements, comprised by the fragments, into the document object model of the parent document</li>
+						<li>Koala supports the dynamic update of pages in response to both request-scoped and session-scoped events</li>
+						<li>Koala may be used to produce websites for offline viewing, hosted on the local filesystem, and presentational websites with simulated dynamic functionality</li>
+						<li>Koala is designed for server-side novices, who wish to produce a website without configuring a web server, and is also ideal for wireframing and prototyping of websites</li>
+						<li>Koala is released under the GNU General Public License</li>
+					</ul>
+				</article>
+			</section>
+			<section id="tutorial">
+				<article>
+					<hgroup>
+						<h1>Tutorial</h1>
+						<h2>Working Example</h2>
+					</hgroup>
+					<p>
+In this example we will create a simple HTML5 website that utilises Koala
+client-side includes, in order to generalise some of the HTML into shared
+modules, and also with dynamic features simulated using Koala request-scoped and
+session-scoped events.
+					</p>
+					<p>
+Note that Koala works equally well with HTML4, or indeed any XML-based markup
+language supported by the web browser, but we will use HTML5 to produce a modern
+example.
+					</p>
+					<p>
+Koala is released in a 'minified' form, which means that all excess whitespace
+has been removed, in order to minimise the file size of the Koala JavaScript
+library and thereby minimise the number of bytes which must be transferred from
+the server to the web browser when the browser loads a document that utilises
+the Koala library and consequently retrieves the Koala library over the
+Internet. 
+					</p>
+					<p>
+Download the minified Koala version 1.0 (beta) library using this hyperlink:
+<a href="res/koala-1.0-beta-src/target/classes/koala-1.0-beta-min.js">koala-1.0-beta-min.js</a>
+					</p>
+					<p>
+Create a new directory on your local filesystem, that will comprise all the
+files defined within this working example, and copy the Koala library file that
+you just downloaded into the new directory.
+					</p>
+					<h3>Home Page</h3>
+					<p>
+Within that directory create a file named <strong>home.html</strong> with the
+following contents:
+					</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;Home - Example.com&lt;/title&gt;
+		&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;default.css&quot;/&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;koala-1.0-beta-min.js&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;header-nav-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;section&gt;
+			&lt;article&gt;
+				&lt;hgroup&gt;
+					&lt;h1&gt;Welcome&lt;/h1&gt;
+					&lt;h2&gt;This is my home page&lt;/h2&gt;
+				&lt;/hgroup&gt;
+				&lt;p&gt;Some content for the home page&lt;/p&gt;
+			&lt;/article&gt;
+			&lt;div id=&quot;emotion-article-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;/section&gt;
+		&lt;div id=&quot;footer-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;script type=&quot;text/javascript&quot;&gt;
+			koala.syncInclude(&quot;header-nav-include&quot;, &quot;header-nav.html.inc&quot;);
+			koala.syncInclude(&quot;emotion-article-include&quot;, &quot;emotion-article.html.inc&quot;);
+			koala.syncInclude(&quot;footer-include&quot;, &quot;footer.html.inc&quot;);
+			koala.requestContext(&quot;home-main-menu-option&quot;, &quot;active&quot;);
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+					<p>
+This HTML5 document comprises a <strong>link</strong> element, within the
+<strong>head</strong> of the document, that references the default CSS
+stylesheet that will be defined in a subsequent section of this tutorial.
+					</p>
+					<p>
+The HTML5 document also comprises a <strong>script</strong> element, within the
+<strong>head</strong> of the document, which references the minified Koala
+version 1.0 (beta) library.
+					</p>
+					<p>
+There is a <strong>div</strong> element, defined as the first element of the
+<strong>body</strong> of the document, with an <strong>id</strong> attribute
+equal to <strong>header-nav-include</strong> and a <strong>class</strong>
+attribute equal to the <strong>error</strong> style class:
+					</p>
+<pre><code>&lt;div id=&quot;header-nav-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;</code></pre>
+					<p>
+This element is used as a placeholder that will be substituted for the contents
+of another file, colloquially referred to as an HTML fragment file, that will
+be included by Koala into the HTML5 document.
+					</p>
+					<p>
+In the event of any errors, while retrieving or processing the HTML fragment,
+Koala will write an error message inside the <strong>div</strong> element hence
+that element is styled with an <strong>error</strong> style class.
+					</p>
+					<p>
+Koala does not impose any proprietary convention on the naming of the
+<strong>header-nav-include</strong> element or the <strong>error</strong> style
+class.
+You can define whatever naming convention you wish for these placeholder
+elements and their styling rules.
+					</p>
+					<p>
+You may also use any element other than a <strong>div</strong> element to
+constitute the placeholder, such as a <strong>span</strong> or
+<strong>td</strong> element, bearing in mind that the element will be completely
+replaced by the contents of the included HTML fragment, and that all its child
+elements will be replaced by an error message in the event of an exception
+while retrieving or processing the included fragment.
+					</p>
+					<p>
+The HTML fragment, that will replace the placeholder, is specified to Koala
+using the first line of JavaScript code comprised by the <strong>script</strong>
+element at the bottom of the page:
+					</p>
+<pre><code>koala.syncInclude(&quot;header-nav-include&quot;, &quot;header-nav.html.inc&quot;);</code></pre>
+					<p>
+This call will retrieve the file named <strong>header-nav.html.inc</strong>
+using a synchronous AJAX request, that will block any further execution of
+subsequent JavaScript code until the request is complete and the response is
+retrieved, and will replace the specified element, with an <strong>id</strong>
+attribute equal to <strong>header-nav-include</strong>, with the contents of the
+retrieved HTML fragment that will be defined in the next section of this
+tutorial.
+					</p>
+					<p>
+Koala also provides functionality for asynchronous AJAX requests, which will not
+block while waiting for the included HTML fragments, however in this example we
+will utilise synchronous requests in order to simplify this particular
+application.
+Asynchronous requests will be explained in a later section of the Koala project
+documentation.
+					</p>
+					<p>
+Note that the file name specified as the second argument to the
+<strong>syncInclude</strong> function may be an absolute or relative URL,
+equivalent to the <strong>href</strong> attribute of an <strong>a</strong>
+anchor element. However it is advisable to specify a relative URL, so that your
+website can be viewed offline without a connection to the Internet, for example
+the following imaginary relative URL:
+					</p>
+<pre><code>koala.syncInclude(&quot;header-nav-include&quot;, &quot;../fragments/header-nav.fragment.html&quot;);</code></pre>
+					<p>
+Koala does not impose any convention on the naming of the
+<strong>header-nav.html.inc</strong> file.
+You can define whatever naming convention you wish for the file names of HTML
+fragments used in your website.
+					</p>
+					<p>
+There are two more calls to the <strong>syncInclude</strong> function which are
+associated with two more placeholders in the HTML5 document:
+					</p>
+<pre><code>&lt;div id=&quot;emotion-article-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+...
+&lt;div id=&quot;footer-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+...
+koala.syncInclude(&quot;emotion-article-include&quot;, &quot;emotion-article.html.inc&quot;);
+koala.syncInclude(&quot;footer-include&quot;, &quot;footer.html.inc&quot;);
+</code></pre>
+					<p>
+These placeholders and associated function calls operate in the same way as the
+<strong>header-nav-include</strong> placeholder explained above.
+					</p>
+					<p>
+The <strong>emotion-article-include</strong> placeholder and associated function
+call are used to include an HTML fragment that comprises an HTML5
+<strong>article</strong> element within which the user can answer the question
+"How are you feeling today ?" and their answer is registered as a session-scoped
+event in order to exemplify the simulated session context provided by Koala.
+					</p>
+					<p>
+The <strong>footer-include</strong> placeholder and associated function call are
+used to include an HTML fragment that comprises an HTML5 <strong>footer</strong>
+element used to display copyright information at the bottom of each page in this
+example website. 
+					</p>
+					<p>
+The last line of JavaScript code comprised by the <strong>script</strong>
+element at the bottom of the page invokes a function that registers a
+request-scoped event with Koala:
+					</p>
+<pre><code>koala.requestContext(&quot;home-main-menu-option&quot;, &quot;active&quot;);</code></pre>
+					<p>
+This function call will add the <strong>active</strong> style class to the
+existing style classes defined for the element with an <strong>id</strong>
+attribute equal to <strong>home-main-menu-option</strong> in order to highlight
+the selected main menu option.
+					</p>
+					<p>
+The more advanced reader will at this point realise that there is no element
+defined in the HTML5 document with an <strong>id</strong> attribute equal to
+<strong>home-main-menu-option</strong>.
+					</p>
+					<p>
+That element is actually defined within the HTML fragment associated with the
+<strong>header-nav-include</strong> placeholder defined in the next section.
+					</p>
+					<h3>Header-Nav Include</h3>
+					<p>
+Create a file named <strong>header-nav.html.inc</strong> in your working
+directory, alongside the <strong>home.html</strong> file created at the
+beginning of this tutorial, with the following contents:
+					</p>
+<pre><code>&lt;header&gt;
+	&lt;h1&gt;Example.com&lt;/h1&gt;
+&lt;/header&gt;
+&lt;nav&gt;
+	&lt;ul&gt;
+		&lt;li id=&quot;home-main-menu-option&quot;&gt;
+			&lt;a href=&quot;home.html&quot;&gt;Home&lt;/a&gt;
+		&lt;/li&gt;
+		&lt;li id=&quot;about-us-main-menu-option&quot;&gt;
+			&lt;a href=&quot;about-us.html&quot;&gt;About Us&lt;/a&gt;
+		&lt;/li&gt;
+		&lt;li id=&quot;features-main-menu-option&quot;&gt;
+			&lt;a href=&quot;features.html&quot;&gt;Features&lt;/a&gt;
+		&lt;/li&gt;
+		&lt;li id=&quot;contact-us-main-menu-option&quot;&gt;
+			&lt;a href=&quot;contact-us.html&quot;&gt;Contact Us&lt;/a&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+					<p>
+This fragment of HTML5 comprises a fairly ordinary <strong>header</strong>
+and <strong>nav</strong> element with four menu options all of which are
+uniquely identified using the <strong>id</strong> attribute of the
+<strong>li</strong> list-item elements which constitute the menu options.
+					</p>
+					<p>
+The reader will note that the first such list-item element has an
+<strong>id</strong> attribute equal to <strong>home-main-menu-option</strong>
+that is referenced by the call to the <strong>koala.requestContext</strong>
+function in the home page discussed earlier.
+					</p>
+					<p>
+Koala will include the <strong>header-nav.html.inc</strong> fragment into the
+home page resulting with the following document as interpreted by the browser:
+					</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;Home - Example.com&lt;/title&gt;
+		&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;default.css&quot;/&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;koala-1.0-beta-min.js&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;header&gt;
+			&lt;h1&gt;Example.com&lt;/h1&gt;
+		&lt;/header&gt;
+		&lt;nav&gt;
+			&lt;ul&gt;
+				&lt;li id=&quot;home-main-menu-option&quot;&gt;
+					&lt;a href=&quot;home.html&quot;&gt;Home&lt;/a&gt;
+				&lt;/li&gt;
+				&lt;li id=&quot;about-us-main-menu-option&quot;&gt;
+					&lt;a href=&quot;about-us.html&quot;&gt;About Us&lt;/a&gt;
+				&lt;/li&gt;
+				&lt;li id=&quot;features-main-menu-option&quot;&gt;
+					&lt;a href=&quot;features.html&quot;&gt;Features&lt;/a&gt;
+				&lt;/li&gt;
+				&lt;li id=&quot;contact-us-main-menu-option&quot;&gt;
+					&lt;a href=&quot;contact-us.html&quot;&gt;Contact Us&lt;/a&gt;
+				&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/nav&gt;
+		&lt;section&gt;
+			&lt;article&gt;
+				&lt;hgroup&gt;
+					&lt;h1&gt;Welcome&lt;/h1&gt;
+					&lt;h2&gt;This is my home page&lt;/h2&gt;
+				&lt;/hgroup&gt;
+				&lt;p&gt;Some content for the home page&lt;/p&gt;
+			&lt;/article&gt;
+			&lt;div id=&quot;emotion-article-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;/section&gt;
+		&lt;div id=&quot;footer-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;script type=&quot;text/javascript&quot;&gt;
+			koala.syncInclude(&quot;header-nav-include&quot;, &quot;header-nav.html.inc&quot;);
+			koala.syncInclude(&quot;emotion-article-include&quot;, &quot;emotion-article.html.inc&quot;);
+			koala.syncInclude(&quot;footer-include&quot;, &quot;footer.html.inc&quot;);
+			koala.requestContext(&quot;home-main-menu-option&quot;, &quot;active&quot;);
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+					<p>
+Note that your browser may not yield the full source code of the document when
+viewed using the 'View Page Source' function provided by the browser.
+You may need to install Firebug, or another debugging tool or plug-in for your
+browser, in order to see the document resulting from any include operations.
+					</p>
+					<h3>Style Sheet</h3>
+					<p>
+Create a file named <strong>default.css</strong> in your working directory with
+the following contents:
+					</p>
+<pre><code>body { background: white; font-size: 10px; }
+
+h1, h2, h3, a, p { color: black; }
+h1 { font-size: 1.7em; }
+h2 { font-size: 1.6em; }
+h3 { font-size: 1.5em; }
+a, p { font-size: 1.4em; }
+
+nav ul { list-style: none; display: inline-block; margin: 0 auto; padding: 0; }
+nav li { float: left; display: inline; padding-right: 10px; }
+
+.error { color: red; }
+
+nav li.active a { text-decoration: none; }
+
+#feeling li.active a { text-decoration: none; }</code></pre>
+					<p>
+The above constitutes a fairly ordinary CSS style sheet that specifies some
+relative font sizes and specifies that the main navigation menu should be
+displayed horizontally.
+There is also a selector for the <strong>error</strong> style class that
+represents any error message from Koala with a red font colour.
+					</p>
+					<p>
+The style sheet also specifies that the active main menu option, and the active
+'feeling' option, explained in the next section of this tutorial, should appear
+without any underline in order to indicate to the user that the currently active
+option has indeed been activated.
+					</p>
+					<p>
+Koala does not require any particular style sheet definitions in order to
+function correctly and you may use whatever styling you wish for your website.
+					</p>
+					<h3>Emotion Article Include</h3>
+					<p>
+Create a file named <strong>emotion-article.html.inc</strong> in your working
+directory with the following contents:
+					</p>
+<pre><code>&lt;article&gt;
+	&lt;h3&gt;How are you feeling today ?&lt;/h3&gt;
+	&lt;ul id=&quot;feeling&quot;&gt;
+		&lt;li id=&quot;happy-emotion&quot;&gt;
+			&lt;a href=&quot;#&quot; onclick=&quot;koala.sessionEvent('emotion', 'happy', true);&quot;&gt;Happy happy&lt;/a&gt;
+		&lt;/li&gt;
+		&lt;li id=&quot;joy-emotion&quot;&gt;
+			&lt;a href=&quot;#&quot; onclick=&quot;koala.sessionEvent('emotion', 'joy', true);&quot;&gt;Joy joy&lt;/a&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;a href=&quot;#&quot; onclick=&quot;koala.sessionClear('emotion', true);&quot;&gt;Clear my selection&lt;/a&gt;
+&lt;/article&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+	koala.sessionContext(&quot;emotion&quot;, &quot;happy&quot;, &quot;happy-emotion&quot;, &quot;active&quot;);
+	koala.sessionContext(&quot;emotion&quot;, &quot;joy&quot;, &quot;joy-emotion&quot;, &quot;active&quot;);
+&lt;/script&gt;</code></pre>
+					<p>
+This fragment of HTML5 comprises an <strong>article</strong> element that
+contains a short list of answers to the question "How are you feeling today ?"
+which when clicked execute calls to the <strong>koala.sessionEvent</strong>
+function in order to select an available answer.
+					</p>
+					<p>
+Below the list is a hyperlink that when clicked executes a call to the
+<strong>koala.sessionClear</strong> function in order to clear the selection of
+any answer.
+					</p>
+					<p>
+Finally the fragment comprises a block of JavaScript, executing calls to the
+<strong>koala.sessionContext</strong> function in order to probe the state of
+the simulated session context and, following a session event related to the
+'emotion' feature, changes the style class of the element in the document that
+is related to the selected answer.
+					</p>
+					<p>
+The more advanced reader will wonder if this block of JavaScript will actually
+be executed because the HTML fragment is only inserted into the document object
+model, using a call to the <strong>koala.syncInclude</strong> function, after
+the body of the parent document has been rendered by the browser.
+					</p>
+					<p>
+The reader will note that this apparently anachronistic block of JavaScript will
+be automatically executed by Koala, using the built-in JavaScript
+<strong>eval</strong> function, just after the preceding elements comprised by
+the <strong>emotion-article.html.inc</strong> fragment have been inserted into
+the document object model.
+					</p>
+					<h3>Koala Session Scope</h3>
+					<p>
+Koala utilises browser cookies in order to simulate a session context therefore,
+in the event that the user has cookies turned off in their browser, and in lieu
+of widespread browser support for HTML5 local storage, that will be utilised by
+the next version of Koala, currently the Koala session context will function
+correctly so long as the user does not have cookies turned off in their browser.
+					</p>
+					<p>
+The reader will note that various browsers may impose different rules concerning
+cookies created by websites which are being viewed offline from the local
+filesystem.
+					</p>
+					<p>
+For example, Google Chrome provides a command-line option which activates such
+local cookies, whereas Firefox and most other browsers will by default allow
+local cookies to be created and shared between pages which reside in the same
+directory.
+					</p>
+					<p>
+Following these caveats, let us review the documentation and signature of the
+<strong>koala.sessionEvent</strong> function:
+					</p>
+<pre><code>/**
+ * Informs Koala that a session event occurred that is related to the
+ * website feature associated with the specified unique feature name and the
+ * specified state information describing the event. The currently displayed
+ * web page will be fully refreshed, in order to display the state change
+ * resulting from the session event, if the specified switch is true.
+ * 
+ * @param feature
+ *                the unique feature name.
+ * @param state
+ *                the state information describing the event.
+ * @param refresh
+ *                true to refresh the page, false otherwise.
+ */
+function sessionEvent(feature, state, refresh)</code></pre>
+					<p>
+The <strong>feature</strong> specified to this function does not have to be
+represented in the document.
+The unique feature name is simply an abstract name given to the feature or
+concept; in this case the 'emotion' feature, so that Koala can create a unique
+namespace for any events related to that feature.
+					</p>
+					<p>
+The <strong>state</strong> specified to this function is a
+<Strong>String</Strong> that summarises the event which has occurred.
+The specified state does not have to be represented in the document and simply
+constitutes an abstract summary of the state of the feature following the event.
+					</p>
+					<p>
+Koala does not impose any convention on the names of features or states although
+the reader is advised to limit such naming to alphabet letters and numbers and
+hyphens in order to avoid any issues with the processing of these names within
+Koala and the wider JavaScript and web browser execution environment. 
+					</p>
+					<p>
+Finally the <strong>refresh</strong> switch specified to this function will
+cause the currently displayed web page to be fully refreshed from the server, or
+indeed from the local filesystem when your website is viewed offline, following
+any processing of the specified session event.
+					</p>
+					<p>
+Koala does not mandate this page refresh action, and instead exposes the
+<strong>refresh</strong> switch to callers of this function, because you may
+wish to refresh the page, or particular contents within the page, using a more
+bespoke strategy.
+					</p>
+					<p>
+Returning to the <strong>emotion-article.html.inc</strong> fragment that
+comprises hyperlinks which when clicked will execute calls to the
+<strong>koala.sessionEvent</strong> function:
+					</p>
+<pre><code>&lt;li id=&quot;happy-emotion&quot;&gt;
+	&lt;a href=&quot;#&quot; onclick=&quot;koala.sessionEvent('emotion', 'happy', true);&quot;&gt;Happy happy&lt;/a&gt;
+&lt;/li&gt;
+&lt;li id=&quot;joy-emotion&quot;&gt;
+	&lt;a href=&quot;#&quot; onclick=&quot;koala.sessionEvent('emotion', 'joy', true);&quot;&gt;Joy joy&lt;/a&gt;
+&lt;/li&gt;</code></pre>
+					<p>
+Isolating the first call to the <strong>koala.sessionEvent</strong> function:
+					</p>
+<pre><code>koala.sessionEvent('emotion', 'happy', true);</code></pre>
+					<p>
+When the hyperlink is clicked the function call is executed and Koala registers
+an event related to the 'emotion' feature with a state of 'happy' and then
+refreshes the currently displayed web page.
+					</p>
+					<p>
+Isolating the second call to the <strong>koala.sessionEvent</strong> function:
+					</p>
+<pre><code>koala.sessionEvent('emotion', 'joy', true);</code></pre>
+					<p>
+When the hyperlink is clicked the function call is executed and Koala registers
+an event related to the 'emotion' feature with a state of 'joy', overwriting the
+previous state of 'happy', and then refreshes the currently displayed web page.
+					</p>
+					<p>
+Let us next review the documentation and signature of the
+<strong>koala.sessionClear</strong> function:
+					</p>
+<pre><code>/**
+ * Informs Koala that any previous session event related to a website
+ * feature, associated with the specified unique feature name, should be
+ * permanently cleared and therefore abandoned. The currently displayed web
+ * page will be fully refreshed, in order to display the state change
+ * resulting from the abandonment of any previous session event, if the
+ * specified switch is true.
+ * 
+ * @param feature
+ *                the unique feature name.
+ * @param refresh
+ *                true to refresh the page, false otherwise.
+ */
+function sessionClear(feature, refresh)</code></pre>
+					<p>
+The <strong>feature</strong> specified to this function is equivalent to the
+unique feature name specified to the previously discussed
+<strong>koala.sessionEvent</strong> function.
+					</p>
+					<p>
+The <strong>refresh</strong> switch will optionally refresh the currently
+displayed web page just like the aforementioned <strong>refresh</strong> switch
+specified to the <strong>koala.sessionEvent</strong> function.
+					</p>
+					<p>
+Koala will not raise any exceptions in the event that the specified feature does
+not have any previously registered events and will simply ignore calls to this
+function if the feature is not recognised.
+					</p>
+					<p>
+Any previously registered events related to the specified feature will be
+permanently abandoned thereby resetting the state of the specified feature.
+					</p>
+					<p>
+Finally let us review the documentation and signature of the
+<strong>koala.sessionContext</strong> function:
+					</p>
+<pre><code>/**
+ * Responds to a Koala session event, which may have previously occurred,
+ * that is related to the website feature associated with the specified
+ * unique feature name and the specified state information describing the
+ * event. If the specified event did previously occur then the specified
+ * style class will be added to any extant style classes, defined using the
+ * 'class' attriubute, of the DOM element identified by the specified unique
+ * identifier.
+ * 
+ * @param feature
+ *                the unique feature name.
+ * @param state
+ *                the state information describing the event.
+ * @param id
+ *                the unique identifier of the element.
+ * @param style
+ *                the style class applied to the element.
+ */
+function sessionContext(feature, state, id, style)</code></pre>
+					<p>
+The <strong>feature</strong> specified to this function is equivalent to the
+unique feature name specified to the previously discussed
+<strong>koala.sessionEvent</strong> function.
+					</p>
+					<p>
+The <strong>state</strong> specified to this function is equivalent to the
+state information specified to the aforementioned
+<strong>koala.sessionEvent</strong> function.
+					</p>
+					<p>
+Koala will not raise any exceptions in the event that the specified feature does
+not have any previously registered events, or in the event that the specified
+state is not currently associated with that feature, and will simply ignore
+calls to this function if the specified state and/or feature is not recognised.
+					</p>
+					<p>
+If the specified feature does indeed have a previously registered event
+summarised by the specified state information then Koala will add the
+style class, specified using the <strong>style</strong> parameter, to the
+existing style classes defined for the element with an <strong>id</strong>
+attribute equal to the specified <strong>id</strong> parameter.
+					</p>
+					<p>
+Returning to the <strong>emotion-article.html.inc</strong> fragment that
+comprises a block of JavaScript that will execute calls to the
+<strong>koala.sessionContext</strong> function:
+					</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
+	koala.sessionContext(&quot;emotion&quot;, &quot;happy&quot;, &quot;happy-emotion&quot;, &quot;active&quot;);
+	koala.sessionContext(&quot;emotion&quot;, &quot;joy&quot;, &quot;joy-emotion&quot;, &quot;active&quot;);
+&lt;/script&gt;</code></pre>
+					<p>
+Isolating the first call to the <strong>koala.sessionContext</strong> function:
+					</p>
+<pre><code>koala.sessionContext(&quot;emotion&quot;, &quot;happy&quot;, &quot;happy-emotion&quot;, &quot;active&quot;);</code></pre>
+					<p>
+This function call will add the <strong>active</strong> style class to the
+existing style classes defined for the element with an <strong>id</strong>
+attribute equal to <strong>happy-emotion</strong> in order to highlight
+the "Happy happy" answer to the question "How are you feeling ?" in the event
+that the user has previously clicked the 'Happy happy' hyperlink that registers
+that event with Koala by executing a previous call to the
+<strong>koala.sessionEvent</strong> function.
+					</p>
+					<p>
+Isolating the second call to the <strong>koala.sessionContext</strong> function:
+					</p>
+<pre><code>koala.sessionContext(&quot;emotion&quot;, &quot;joy&quot;, &quot;joy-emotion&quot;, &quot;active&quot;);</code></pre>
+					<p>
+This function call will add the <strong>active</strong> style class to the
+existing style classes defined for the element with an <strong>id</strong>
+attribute equal to <strong>joy-emotion</strong> in order to highlight
+the "Joy joy" answer to the question "How are you feeling ?" in the event that
+the user has previously clicked the 'Joy joy' hyperlink.
+					</p>
+					<p>
+You can add multiple style classes to elements, using a call to the
+<strong>koala.sessionContext</strong> function, by specifying a space-separated
+list of style classes for example:
+					</p>
+<pre><code>koala.sessionContext(&quot;emotion&quot;, &quot;joy&quot;, &quot;joy-emotion&quot;, &quot;active highlighted&quot;);</code></pre>
+					<p>
+You can also execute multiple calls to the <strong>koala.sessionContext</strong>
+function for the same previously registered event in order to modify the style
+classes for multiple elements.
+					</p>
+					<p>
+For example you may wish to modify the style of both the hyperlink and the
+unordered list that contains the hyperlink with this set of calls to the
+<strong>koala.sessionContext</strong> function:
+					</p>
+<pre><code>koala.sessionContext(&quot;emotion&quot;, &quot;joy&quot;, &quot;joy-emotion&quot;, &quot;active&quot;);
+koala.sessionContext(&quot;emotion&quot;, &quot;joy&quot;, &quot;feeling&quot;, &quot;highlighted&quot;);
+</code></pre>
+					<h3>Footer Include</h3>
+					<p>
+Create a file named <strong>footer.html.inc</strong> in your working directory
+with the following contents:
+					</p>
+<pre><code>&lt;footer&gt;
+	&lt;h2&gt;&amp;copy; Example.com 2012&lt;/h2&gt;
+&lt;/footer&gt;</code></pre>
+					<p>
+This fragment of HTML5 simply comprises a <strong>footer</strong> element that
+contains some example copyright information.
+					</p>
+					<h3>Home Page Finale</h3>
+					<p>
+After the home page has been fully loaded, and all the JavaScript calls to Koala
+functions have executed, Koala should have included all three of the
+<strong>header-nav.html.inc</strong> and the
+<strong>emotion-article.html.inc</strong> and the
+<strong>footer.html.inc</strong> fragments into the home page resulting with the
+following document as interpreted by the browser:
+					</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;Home - Example.com&lt;/title&gt;
+		&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;default.css&quot;/&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;koala-1.0-beta-min.js&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;header&gt;
+			&lt;h1&gt;Example.com&lt;/h1&gt;
+		&lt;/header&gt;
+		&lt;nav&gt;
+			&lt;ul&gt;
+				&lt;li id=&quot;home-main-menu-option&quot;&gt;
+					&lt;a href=&quot;home.html&quot;&gt;Home&lt;/a&gt;
+				&lt;/li&gt;
+				&lt;li id=&quot;about-us-main-menu-option&quot;&gt;
+					&lt;a href=&quot;about-us.html&quot;&gt;About Us&lt;/a&gt;
+				&lt;/li&gt;
+				&lt;li id=&quot;features-main-menu-option&quot;&gt;
+					&lt;a href=&quot;features.html&quot;&gt;Features&lt;/a&gt;
+				&lt;/li&gt;
+				&lt;li id=&quot;contact-us-main-menu-option&quot;&gt;
+					&lt;a href=&quot;contact-us.html&quot;&gt;Contact Us&lt;/a&gt;
+				&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/nav&gt;
+		&lt;section&gt;
+			&lt;article&gt;
+				&lt;hgroup&gt;
+					&lt;h1&gt;Welcome&lt;/h1&gt;
+					&lt;h2&gt;This is my home page&lt;/h2&gt;
+				&lt;/hgroup&gt;
+				&lt;p&gt;Some content for the home page&lt;/p&gt;
+			&lt;/article&gt;
+			&lt;article&gt;
+				&lt;h3&gt;How are you feeling today ?&lt;/h3&gt;
+				&lt;ul id=&quot;feeling&quot;&gt;
+					&lt;li id=&quot;happy-emotion&quot;&gt;
+						&lt;a href=&quot;#&quot; onclick=&quot;koala.sessionEvent('emotion', 'happy', true);&quot;&gt;Happy happy&lt;/a&gt;
+					&lt;/li&gt;
+					&lt;li id=&quot;joy-emotion&quot;&gt;
+						&lt;a href=&quot;#&quot; onclick=&quot;koala.sessionEvent('emotion', 'joy', true);&quot;&gt;Joy joy&lt;/a&gt;
+					&lt;/li&gt;
+				&lt;/ul&gt;
+				&lt;a href=&quot;#&quot; onclick=&quot;koala.sessionClear('emotion', true);&quot;&gt;Clear my selection&lt;/a&gt;
+			&lt;/article&gt;
+			&lt;script type=&quot;text/javascript&quot;&gt;
+				koala.sessionContext(&quot;emotion&quot;, &quot;happy&quot;, &quot;happy-emotion&quot;, &quot;active&quot;);
+				koala.sessionContext(&quot;emotion&quot;, &quot;joy&quot;, &quot;joy-emotion&quot;, &quot;active&quot;);
+			&lt;/script&gt;
+		&lt;/section&gt;
+		&lt;footer&gt;
+			&lt;h2&gt;&amp;copy; Example.com 2012&lt;/h2&gt;
+		&lt;/footer&gt;
+		&lt;script type=&quot;text/javascript&quot;&gt;
+			koala.syncInclude(&quot;header-nav-include&quot;, &quot;header-nav.html.inc&quot;);
+			koala.syncInclude(&quot;emotion-article-include&quot;, &quot;emotion-article.html.inc&quot;);
+			koala.syncInclude(&quot;footer-include&quot;, &quot;footer.html.inc&quot;);
+			koala.requestContext(&quot;home-main-menu-option&quot;, &quot;active&quot;);
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+					<p>
+As discussed earlier, you may need to install Firebug, or some other debugging
+tool, in order to view the above document after all the includes have been
+processed.
+					</p>
+					<p>
+The web browser should now display the home page with all the included fragments
+similar to the following screen-shot resulting from our fully loaded home page
+when displayed in Mozilla Firefox 14 on Linux:
+					</p>
+					<figure id="koala-example-home-page"></figure>
+					<p>
+Your browser will probably display the fonts and spacing between elements
+differently, prior to fully specifying such characteristics using the CSS style
+sheet, but you should see that all the HTML fragments have been included in the
+page.
+					</p>
+					<h3>Koala Power</h3>
+					<p>
+Now that we have created the common HTML fragments, and prototyped
+request-scoped and session-scoped events, we can rapidly develop the remaining
+pages which comprise the website.
+					</p>
+					<h3>About Us Page</h3>
+					<p>
+Create a file named <strong>about-us.html</strong> in your working directory
+with the following contents:
+					</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;About Us - Example.com&lt;/title&gt;
+		&lt;link rel=&quot;stylesheet&quot; href=&quot;default.css&quot; type=&quot;text/css&quot;/&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;koala-1.0-beta-min.js&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;header-nav-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;section&gt;
+			&lt;article&gt;
+				&lt;hgroup&gt;
+					&lt;h1&gt;About Us&lt;/h1&gt;
+					&lt;h2&gt;All about us and our website&lt;/h2&gt;
+				&lt;/hgroup&gt;
+				&lt;p&gt;Some content for the about us page&lt;/p&gt;
+			&lt;/article&gt;
+			&lt;div id=&quot;emotion-article-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;/section&gt;
+		&lt;div id=&quot;footer-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;script type=&quot;text/javascript&quot;&gt;
+			koala.syncInclude(&quot;header-nav-include&quot;, &quot;header-nav.html.inc&quot;);
+			koala.syncInclude(&quot;emotion-article-include&quot;, &quot;emotion-article.html.inc&quot;);
+			koala.syncInclude(&quot;footer-include&quot;, &quot;footer.html.inc&quot;);
+			koala.requestContext(&quot;about-us-main-menu-option&quot;, &quot;active&quot;);
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+					<p>
+This HTML5 document is equivalent to the home page, employing Koala to include
+the same common HTML5 fragments and invoke the same functions to handle
+request-scoped and session-scoped events, with only key modifications of the
+titles and contents related to the about us page.
+					</p>
+					<p>
+The only functional difference between the about us page and the home page is
+the activation of the main menu option for the about us page achieved using a
+slightly different call to the <strong>koala.requestContext</strong> function
+in the JavaScript block at the bottom of the page:
+					</p>
+<pre><code>koala.requestContext(&quot;about-us-main-menu-option&quot;, &quot;active&quot;);</code></pre>
+					<h3>Features Page</h3>
+					<p>
+Create a file named <strong>features.html</strong> in your working directory
+with the following contents:
+					</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;Features - Example.com&lt;/title&gt;
+		&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;default.css&quot;/&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;koala-1.0-beta-min.js&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;header-nav-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;section&gt;
+			&lt;article&gt;
+				&lt;hgroup&gt;
+					&lt;h1&gt;Features&lt;/h1&gt;
+					&lt;h2&gt;The main features of this website&lt;/h2&gt;
+				&lt;/hgroup&gt;
+				&lt;p&gt;Some content for the features page&lt;/p&gt;
+			&lt;/article&gt;
+			&lt;div id=&quot;emotion-article-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;/section&gt;
+		&lt;div id=&quot;footer-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;script type=&quot;text/javascript&quot;&gt;
+			koala.syncInclude(&quot;header-nav-include&quot;, &quot;header-nav.html.inc&quot;);
+			koala.syncInclude(&quot;emotion-article-include&quot;, &quot;emotion-article.html.inc&quot;);
+			koala.syncInclude(&quot;footer-include&quot;, &quot;footer.html.inc&quot;);
+			koala.requestContext(&quot;features-main-menu-option&quot;, &quot;active&quot;);
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+					<p>
+Again, the only functional difference between this page and the home page is
+the activation of the main menu option for this features page achieved using a
+slightly different call to the <strong>koala.requestContext</strong> function:
+					</p>
+<pre><code>koala.requestContext(&quot;features-main-menu-option&quot;, &quot;active&quot;);</code></pre>
+					
+					<h3>Contact Us Page</h3>
+					<p>
+Finally create a file named <strong>contact-us.html</strong> in your working
+directory with the following contents:
+					</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;Contact Us - Example.com&lt;/title&gt;
+		&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;default.css&quot;/&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;koala-1.0-beta-min.js&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id=&quot;header-nav-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;section&gt;
+			&lt;article&gt;
+				&lt;hgroup&gt;
+					&lt;h1&gt;Contact Us&lt;/h1&gt;
+					&lt;h2&gt;Get in touch with us&lt;/h2&gt;
+				&lt;/hgroup&gt;
+				&lt;p&gt;Some content for the contact us page&lt;/p&gt;
+			&lt;/article&gt;
+			&lt;div id=&quot;emotion-article-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;/section&gt;
+		&lt;div id=&quot;footer-include&quot; class=&quot;error&quot;&gt;&lt;/div&gt;
+		&lt;script type=&quot;text/javascript&quot;&gt;
+			koala.syncInclude(&quot;header-nav-include&quot;, &quot;header-nav.html.inc&quot;);
+			koala.syncInclude(&quot;emotion-article-include&quot;, &quot;emotion-article.html.inc&quot;);
+			koala.syncInclude(&quot;footer-include&quot;, &quot;footer.html.inc&quot;);
+			koala.requestContext(&quot;contact-us-main-menu-option&quot;, &quot;active&quot;);
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+					<p>
+The more advanced reader will note that we have not defined an index page with
+the file name <strong>index.html</strong> in order to integrate with essential
+web standards implemented by both browsers and web servers.
+					</p>
+					<p>
+Create a file named <strong>index.html</strong> in your working directory with
+the following contents:
+					</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;Example.com&lt;/title&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;koala-1.0-beta-min.js&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;script type=&quot;text/javascript&quot;&gt;
+			koala.sessionClear(&quot;emotion&quot;, false);
+			window.open(&quot;home.html&quot;, &quot;_self&quot;);
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+					<p>
+This HTML page constitutes a refresh page that forwards the user's browser to
+the <strong>home.html</strong> page.
+					</p>
+					<p>
+In this case any previous events related to the 'emotion' feature are abandoned,
+in order to reset any previously selected emotion when the user re-enters the
+website, by executing a call to the <strong>koala.sessionClear</strong>
+function:
+					</p>
+<pre><code>koala.sessionClear(&quot;emotion&quot;, false);</code></pre>
+					<p>
+Note that this function call passes a value of <strong>false</strong> to the
+<strong>koala.sessionClear</strong> function, so that Koala does not refresh
+the page, because the page is instead refreshed by a subsequent call to the
+built-in JavaScript function <strong>window.open</strong> in order to forward
+the user's browser to the home page.
+					</p>
+					<h3>Conclusion</h3>
+					<p>
+Finally open the <strong>index.html</strong> page in your web browser, using
+the <strong>File &gt; Open File...</strong> main menu option provided by the
+browser, that should forward your browser to the home page of your new example
+website built using Koala.
+					</p>
+				</article>
+			</section>
+			<div id="push"></div>
+		</div>
+		<footer>
+			<h1>&copy; 2010-2013 Chris White. All rights reserved</h1>
+		</footer>
+	</body>
+</html>

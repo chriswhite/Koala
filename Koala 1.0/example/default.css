@@ -1,0 +1,16 @@
+body { background: white; font-size: 10px; }
+
+h1, h2, h3, a, p { color: black; }
+h1 { font-size: 1.7em; }
+h2 { font-size: 1.6em; }
+h3 { font-size: 1.5em; }
+a, p { font-size: 1.4em; }
+
+nav ul { list-style: none; display: inline-block; margin: 0 auto; padding: 0; }
+nav li { float: left; display: inline; padding-right: 10px; }
+
+.error { color: red; }
+
+nav li.active a { text-decoration: none; }
+
+#feeling li.active a { text-decoration: none; }

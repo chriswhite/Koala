@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>About Us - Example.com</title>
+		<link rel="stylesheet" type="text/css" href="default.css"/>
+		<script type="text/javascript" src="../../src/main/javascript/koala-1.0-beta.js"></script>
+	</head>
+	<body>
+		<div id="header-nav-include" class="error"></div>
+		<section>
+			<article>
+				<hgroup>
+					<h1>About Us</h1>
+					<h2>All about us and our website</h2>
+				</hgroup>
+				<p>Some content for the about us page</p>
+			</article>
+			<div id="emotion-article-include" class="error"></div>
+		</section>
+		<div id="footer-include" class="error"></div>
+		<script type="text/javascript">
+			koala.syncInclude("header-nav-include", "header-nav.html.inc");
+			koala.syncInclude("emotion-article-include", "emotion-article.html.inc");
+			koala.syncInclude("footer-include", "footer.html.inc");
+			koala.requestContext("about-us-main-menu-option", "active");
+		</script>
+	</body>
+</html>
