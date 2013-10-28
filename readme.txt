@@ -250,6 +250,7 @@ Finally the fragment comprises a block of JavaScript, executing calls to the koa
 The more advanced reader will wonder if this block of JavaScript will actually be executed because the HTML fragment is only inserted into the document object model, using a call to the koala.syncInclude function, after the body of the parent document has been rendered by the browser.
 
 The reader will note that this apparently anachronistic block of JavaScript will be automatically executed by Koala, using the built-in JavaScript eval function, just after the preceding elements comprised by the emotion-article.html.inc fragment have been inserted into the document object model.
+
 Koala Session Scope
 
 Koala utilises browser cookies in order to simulate a session context therefore, in the event that the user has cookies turned off in their browser, and in lieu of widespread browser support for HTML5 local storage, that will be utilised by the next version of Koala, currently the Koala session context will function correctly so long as the user does not have cookies turned off in their browser.
